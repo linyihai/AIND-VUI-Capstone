@@ -130,6 +130,7 @@ def bidirectional_rnn_model(input_dim, units, output_dim=29):
     input_data = Input(name='the_input', shape=(None, input_dim))
     # TODO: Add bidirectional recurrent layer
     bidir_rnn = Bidirectional(GRU(units, return_sequences=True))(input_data)
+    bidir_rnn = BatchNormalization()(bidir_rnn)
     # TODO: Add a TimeDistributed(Dense(output_dim)) layer
     time_dense = TimeDistributed(Dense(output_dim))(bidir_rnn)
     # Add softmax activation layer
@@ -149,7 +150,6 @@ def dilation_cnn_model(input_dim, filters, kernel_size, conv_stride,
     # TODO: Add bidirectional recurrent layer
     bidir_rnn = Bidirectional(LSTM(units, return_sequences=True, use_bias=True, kernel_initializer='he_normal'))(input_data)
     simp_rnn = LSTM(units, return_sequences=True, use_bias=True, kernel_initializer='he_normal')(bidir_rnn)
-
     bn_rnn = BatchNormalization()(simp_rnn)
     # TODO: Add a TimeDistributed(Dense(output_dim)) layer
     time_dense = TimeDistributed(Dense(output_dim))(bn_rnn)
